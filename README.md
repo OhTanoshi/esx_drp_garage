@@ -1,6 +1,9 @@
 # esx_eden_garage
 Garage privé basé sur ESX
 
+Requirement : 
+fxserver-esx_vehicleshop
+
 Le garage prends en compte uniquement les véhicules achetés dans le concessionaire et aussi les véhicules qui sont dehors ou non.
 Lors d'un reboot tous les véhicules passe en rentré.
 
