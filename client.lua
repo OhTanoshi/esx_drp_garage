@@ -158,13 +158,54 @@ function StockVehicleMenu()
 
 		local vehicle       = GetClosestVehicle(this_Garage.DeletePoint.Pos.x, this_Garage.DeletePoint.Pos.y, this_Garage.DeletePoint.Pos.z, this_Garage.DeletePoint.Size.x, 0, 70)
 		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+		local current 	    = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+		local engineHealth  = GetVehicleEngineHealth(current)
 
 		ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 
-			if(valid) then
+			if (valid) then
 				TriggerServerEvent('eden_garage:debug', vehicle)
 				DeleteVehicle(vehicle)
 				TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
+				------------------------------------------------------- sauvegarde de l'etat du vehicule
+				TriggerServerEvent('eden_garage:logging', "engineHealth \t" .. engineHealth.. "\n")
+				
+			
+	if engineHealth < 990 then
+		if engineHealth < 960  then
+			if engineHealth < 930 then
+				if engineHealth < 900 then
+					if engineHealth < 870 then
+						if engineHealth < 840 then
+							if engineHealth < 800 then
+								TriggerServerEvent('eden_garage:payhealth', 2000)
+								TriggerServerEvent('eden_garage:logging', "$2000 a été payé \n")
+							else
+								TriggerServerEvent('eden_garage:payhealth', 1800)
+								TriggerServerEvent('eden_garage:logging', "$1800 a été payé \n")
+							end
+						else 
+							TriggerServerEvent('eden_garage:payhealth', 1700)
+							TriggerServerEvent('eden_garage:logging', "$1700 a été payé \n")
+						end
+					else 
+						TriggerServerEvent('eden_garage:payhealth', 1600)
+						TriggerServerEvent('eden_garage:logging', "$1600 a été payé \n")
+					end
+				else 
+					TriggerServerEvent('eden_garage:payhealth', 1500)
+					TriggerServerEvent('eden_garage:logging', "$1500 a été payé \n")
+				end
+			else 
+				TriggerServerEvent('eden_garage:payhealth', 1000)
+				TriggerServerEvent('eden_garage:logging', "$1000 a été payé \n")
+			end
+		else
+			TriggerServerEvent('eden_garage:payhealth', 500)
+			TriggerServerEvent('eden_garage:logging', "$500 a été payé \n")
+		end
+	end
+				-------------------------------------------------------
 				TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
 			else
 				TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')

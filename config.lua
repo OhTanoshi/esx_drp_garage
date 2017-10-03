@@ -3,12 +3,12 @@ Config = {
 	Price = 5000,
 	BlipInfos = {
 		Sprite = 290,
-		Color = 5 
+		Color = 38 
 	}
 }
 
 Config.Garages = {
-	Centre = {	
+	Garage_Centre = {	
 		Pos = {x=215.800, y=-810.057, z=29.727},
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
 		Color = {r = 204, g = 204, b = 0},
@@ -26,7 +26,7 @@ Config.Garages = {
 			Marker = 1
 		}, 	
 	},
-	Paleto = {	
+	Garage_Paleto = {	
 		Pos = {x=105.359, y=6613.586, z=31.3973},
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
 		Color = {r = 204, g = 204, b = 0},
