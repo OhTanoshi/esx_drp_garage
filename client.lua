@@ -1,3 +1,5 @@
+
+
 -- Local
 local Keys = {
 	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57, 
@@ -56,6 +58,16 @@ function refreshBlips()
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString(zoneKey)
 		EndTextCommandSetBlipName(blip)
+
+		local blip = AddBlipForCoord(zoneValues.MunicipalPoundPoint.Pos.x, zoneValues.MunicipalPoundPoint.Pos.y, zoneValues.MunicipalPoundPoint.Pos.z)
+		SetBlipSprite (blip, Config.BlipPound.Sprite)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale  (blip, 1.2)
+		SetBlipColour (blip, Config.BlipPound.Color)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString("Fourriere")
+		EndTextCommandSetBlipName(blip)
 	end
 end
 -- Fin Gestion des Blips
@@ -70,7 +82,7 @@ function OpenMenuGarage()
 	local elements = {
 		{label = "Liste des véhicules", value = 'list_vehicles'},
 		{label = "Rentrer vehicules", value = 'stock_vehicle'},
-		{label = "Retour vehicule ("..Config.Price.."$)", value = 'return_vehicle'},
+		-- {label = "Retour vehicule ("..Config.Price.."$)", value = 'return_vehicle'},
 	}
 
 
@@ -90,9 +102,9 @@ function OpenMenuGarage()
 			if(data.current.value == 'stock_vehicle') then
 				StockVehicleMenu()
 			end
-			if(data.current.value == 'return_vehicle') then
-				ReturnVehicleMenu()
-			end
+			-- if(data.current.value == 'return_vehicle') then
+			--	ReturnVehicleMenu()
+			-- end
 
 			local playerPed = GetPlayerPed(-1)
 			SpawnVehicle(data.current.value)
@@ -105,6 +117,54 @@ function OpenMenuGarage()
 		end
 	)	
 end
+
+--Fonction Menu
+
+function OpenMenuPound()
+	
+	
+	ESX.UI.Menu.CloseAll()
+
+	local elements = {
+		--{label = "Liste des véhicules", value = 'list_vehicles'},
+		--{label = "Rentrer vehicules", value = 'stock_vehicle'},
+		{label = "Recupérer vehicule ("..Config.Price.."$)", value = 'return_vehicle'},
+	}
+
+
+	ESX.UI.Menu.Open(
+		'default', GetCurrentResourceName(), 'pound_menu',
+		{
+			title    = 'Fourriere',
+			align    = 'top-left',
+			elements = elements,
+		},
+		function(data, menu)
+
+			menu.close()
+			--if(data.current.value == 'list_vehicles') then
+			--	ListVehiclesMenu()
+			--end
+			--if(data.current.value == 'stock_vehicle') then
+			--	StockVehicleMenu()
+			--end
+			 if(data.current.value == 'return_vehicle') then
+				ReturnVehicleMenu()
+			 end
+
+			local playerPed = GetPlayerPed(-1)
+			SpawnVehicle(data.current.value)
+			--local coords    = societyConfig.Zones.VehicleSpawnPoint.Pos
+
+		end,
+		function(data, menu)
+			menu.close()
+			--CurrentAction = 'open_garage_action'
+		end
+	)	
+end
+
+
 -- Afficher les listes des vehicules
 function ListVehiclesMenu()
 	local elements = {}
@@ -118,10 +178,10 @@ function ListVehiclesMenu()
     		local labelvehicle
 
     		if(v.state)then
-    		labelvehicle = vehicleName..': Rentré'
+    		labelvehicle = vehicleName..': Garage'
     		
     		else
-    		labelvehicle = vehicleName..': Sortie'
+    		labelvehicle = vehicleName..': Fourriere'
     		end	
 			table.insert(elements, {label =labelvehicle , value = v})
 			
@@ -139,7 +199,7 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-				TriggerEvent('esx:showNotification', 'Votre véhicule est déjà sorti')
+				TriggerEvent('esx:showNotification', 'Votre véhicule est a la fourriere')
 			end
 		end,
 		function(data, menu)
@@ -235,11 +295,35 @@ function SpawnVehicle(vehicle)
 end
 --Fin fonction pour spawn vehicule
 
+--Fonction pour spawn vehicule fourriere
+function SpawnPoundedVehicle(vehicle)
+
+	ESX.Game.SpawnVehicle(vehicle.model, {
+		x = this_Garage.SpawnMunicipalPoundPoint.Pos.x ,
+		y = this_Garage.SpawnMunicipalPoundPoint.Pos.y,
+		z = this_Garage.SpawnMunicipalPoundPoint.Pos.z + 1											
+		},180, function(callback_vehicle)
+		ESX.Game.SetVehicleProperties(callback_vehicle, vehicle)
+		end)
+	TriggerServerEvent('eden_garage:modifystate', vehicle, true)
+
+	ESX.SetTimeout(10000, function()
+		TriggerServerEvent('eden_garage:modifystate', vehicle, false)
+	end)
+
+end
+--Fin fonction pour spawn vehicule fourriere
+
 --Action das les markers
 AddEventHandler('eden_garage:hasEnteredMarker', function(zone)
 	if zone == 'garage' then
 		CurrentAction     = 'garage_action_menu'
 		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage"
+		CurrentActionData = {}
+	end
+	if zone == 'pound' then
+		CurrentAction     = 'pound_action_menu'
+		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour acceder a la fourriere"
 		CurrentActionData = {}
 	end
 end)
@@ -281,7 +365,7 @@ function ReturnVehicleMenu()
 				if hasEnoughMoney then
 							
 					TriggerServerEvent('eden_garage:pay')
-					SpawnVehicle(data.current.value)
+					SpawnPoundedVehicle(data.current.value)
 				else
 					ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
 				end
@@ -306,7 +390,10 @@ Citizen.CreateThread(function()
 				DrawMarker(v.Marker, v.Pos.x, v.Pos.y, v.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.Size.x, v.Size.y, v.Size.z, v.Color.r, v.Color.g, v.Color.b, 100, false, true, 2, false, false, false, false)
 				DrawMarker(v.SpawnPoint.Marker, v.SpawnPoint.Pos.x, v.SpawnPoint.Pos.y, v.SpawnPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.SpawnPoint.Size.x, v.SpawnPoint.Size.y, v.SpawnPoint.Size.z, v.SpawnPoint.Color.r, v.SpawnPoint.Color.g, v.SpawnPoint.Color.b, 100, false, true, 2, false, false, false, false)	
 				DrawMarker(v.DeletePoint.Marker, v.DeletePoint.Pos.x, v.DeletePoint.Pos.y, v.DeletePoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.DeletePoint.Size.x, v.DeletePoint.Size.y, v.DeletePoint.Size.z, v.DeletePoint.Color.r, v.DeletePoint.Color.g, v.DeletePoint.Color.b, 100, false, true, 2, false, false, false, false)	
-
+			end
+			if(GetDistanceBetweenCoords(coords, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, true) < Config.DrawDistance) then
+				DrawMarker(v.MunicipalPoundPoint.Marker, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.MunicipalPoundPoint.Size.x, v.MunicipalPoundPoint.Size.y, v.MunicipalPoundPoint.Size.z, v.MunicipalPoundPoint.Color.r, v.MunicipalPoundPoint.Color.g, v.MunicipalPoundPoint.Color.b, 100, false, true, 2, false, false, false, false)	
+				DrawMarker(v.SpawnMunicipalPoundPoint.Marker, v.SpawnMunicipalPoundPoint.Pos.x, v.SpawnMunicipalPoundPoint.Pos.y, v.SpawnMunicipalPoundPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.SpawnMunicipalPoundPoint.Size.x, v.SpawnMunicipalPoundPoint.Size.y, v.SpawnMunicipalPoundPoint.Size.z, v.SpawnMunicipalPoundPoint.Color.r, v.SpawnMunicipalPoundPoint.Color.g, v.SpawnMunicipalPoundPoint.Color.b, 100, false, true, 2, false, false, false, false)	
 			end		
 		end	
 	end
@@ -328,6 +415,11 @@ Citizen.CreateThread(function()
 				isInMarker  = true
 				this_Garage = v
 			end
+			if(GetDistanceBetweenCoords(coords, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, true) < v.MunicipalPoundPoint.Size.x) then
+				isInMarker  = true
+				this_Garage = v
+				currentZone = 'pound'
+			end
 		end
 
 		if isInMarker and not hasAlreadyEnteredMarker then
@@ -345,7 +437,7 @@ Citizen.CreateThread(function()
 end)
 
 
--- Fin activer le menu quand player dedans
+-- Fin activer le menu fourriere quand player dedans
 
 -- Controle touche
 Citizen.CreateThread(function()
@@ -364,6 +456,9 @@ Citizen.CreateThread(function()
 				if CurrentAction == 'garage_action_menu' then
 					OpenMenuGarage()
 				end
+				if CurrentAction == 'pound_action_menu' then
+					OpenMenuPound()
+				end
 
 				CurrentAction = nil
 				GUI.Time      = GetGameTimer()
@@ -373,3 +468,4 @@ Citizen.CreateThread(function()
 	end
 end)
 -- Fin controle touche
+
