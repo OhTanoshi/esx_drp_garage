@@ -366,6 +366,7 @@ function ReturnVehicleMenu()
 							
 					TriggerServerEvent('eden_garage:pay')
 					SpawnPoundedVehicle(data.current.value)
+					ESX.UI.Menu.CloseAll()
 				else
 					ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
 				end
