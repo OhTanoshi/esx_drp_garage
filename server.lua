@@ -116,8 +116,7 @@ AddEventHandler('eden_garage:pay', function()
 		society_police_account = account
 	end)
 	local xPlayer = ESX.GetPlayerFromId(source)
-	xPlayer.removeAccountMoney('bank', Config.price)
-
+	xPlayer.removeMoney(Config.Price)
 	if society_mecano_account ~= nil then
 		society_mecano_account.addMoney(math.floor(Config.price/100 * 80))
 	end
@@ -208,7 +207,7 @@ AddEventHandler('eden_garage:payhealth', function(price)
                 society_police_account = account
         end)
         local xPlayer = ESX.GetPlayerFromId(source)
-        xPlayer.removeAccountMoney('bank', price)
+	xPlayer.removeMoney(price)
 
         if society_mecano_account ~= nil then
                 society_mecano_account.addMoney(math.floor(price/100 * 80))
