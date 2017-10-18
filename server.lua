@@ -107,12 +107,23 @@ end)
 --fonction qui retire argent
 
 AddEventHandler('eden_garage:pay', function()
-
+	local society_mecano_account = nil
+	local society_police_account = nil
+        TriggerEvent('esx_addonaccount:getSharedAccount', 'society_mecano', function(account)
+                society_mecano_account = account
+        end)
+	TriggerEvent('esx_addonaccount:getSharedAccount', 'society_police', function(account)
+		society_police_account = account
+	end)
 	local xPlayer = ESX.GetPlayerFromId(source)
-
 	xPlayer.removeMoney(Config.Price)
-
-	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. Config.Price)
+	if society_mecano_account ~= nil then
+		society_mecano_account.addMoney(math.floor(Config.price/100 * 80))
+	end
+        if society_police_account ~= nil then
+                society_police_account.addMoney(math.floor(Config.price/100 * 20))
+        end
+	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. Config.Prie)
 
 end)
 --Fin fonction qui retire argent
@@ -179,7 +190,7 @@ end
 -- Fonction qui change les etats sorti en rentré lors d'un restart
 AddEventHandler('onMySQLReady', function()
 
-	MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
+	-- MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
 
 end)
 -- Fin Fonction qui change les etats sorti en rentré lors d'un restart
@@ -187,13 +198,24 @@ end)
 
 --debut de payement pour la santé vehicule
 AddEventHandler('eden_garage:payhealth', function(price)
-
-	local xPlayer = ESX.GetPlayerFromId(source)
-
+        local society_mecano_account = nil
+        local society_police_account = nil
+        TriggerEvent('esx_addonaccount:getSharedAccount', 'society_mecano', function(account)
+                society_mecano_account = account
+        end)
+        TriggerEvent('esx_addonaccount:getSharedAccount', 'society_police', function(account)
+                society_police_account = account
+        end)
+        local xPlayer = ESX.GetPlayerFromId(source)
 	xPlayer.removeMoney(price)
 
-	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. price)
-
+        if society_mecano_account ~= nil then
+                society_mecano_account.addMoney(math.floor(price/100 * 80))
+        end
+        if society_police_account ~= nil then
+                society_police_account.addMoney(math.floor(price/100 * 20))
+        end
+        TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' ..price)
 end)
 --fin de payement pour la santé vehicule
 
