@@ -118,12 +118,12 @@ AddEventHandler('eden_garage:pay', function()
 	local xPlayer = ESX.GetPlayerFromId(source)
 	xPlayer.removeMoney(Config.Price)
 	if society_mecano_account ~= nil then
-		society_mecano_account.addMoney(math.floor(Config.price/100 * 80))
+		society_mecano_account.addMoney(math.floor(Config.Price/100 * 80))
 	end
         if society_police_account ~= nil then
-                society_police_account.addMoney(math.floor(Config.price/100 * 20))
+                society_police_account.addMoney(math.floor(Config.Price/100 * 20))
         end
-	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. Config.Prie)
+	TriggerClientEvent('esx:showNotification', source, 'Vous avez payé ' .. Config.Price)
 
 end)
 --Fin fonction qui retire argent
