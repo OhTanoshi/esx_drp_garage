@@ -20,6 +20,7 @@ local CurrentActionMsg          = ''
 local CurrentActionData         = {}
 
 local this_Garage = {}
+
 -- Fin Local
 
 -- Init ESX
@@ -101,7 +102,9 @@ function OpenMenuGarage()
 				StockVehicleMenu()
 			end
 			if(data.current.value == 'return_vehicle') then
-				ReturnVehicleMenu()
+				ESX.SetTimeout(60000, function()
+					ReturnVehicleMenu()
+				end)
 			end
 
 			local playerPed = GetPlayerPed(-1)
@@ -335,6 +338,7 @@ function ReturnVehicleMenu()
 	ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
 
 		local elements = {}
+		local times = 0
 
 		for _,v in pairs(vehicles) do
 
@@ -356,12 +360,22 @@ function ReturnVehicleMenu()
 			elements = elements,
 		},
 		function(data, menu)
-
+	
 			ESX.TriggerServerCallback('eden_garage:checkMoney', function(hasEnoughMoney)
 				if hasEnoughMoney then
-							
-					TriggerServerEvent('eden_garage:pay')
-					SpawnPoundedVehicle(data.current.value)
+					
+					if times == 0 then
+						TriggerServerEvent('eden_garage:pay')
+						SpawnPoundedVehicle(data.current.value)
+						times=times+1
+					end
+					if times > 0 then
+						ESX.SetTimeout(60000, function()
+						TriggerServerEvent('eden_garage:pay')
+						times=0
+						SpawnPoundedVehicle(data.current.value)
+						end)
+					end
 				else
 					ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
 				end
