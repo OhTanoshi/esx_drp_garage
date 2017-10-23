@@ -179,7 +179,7 @@ end
 -- Fonction qui change les etats sorti en rentré lors d'un restart
 AddEventHandler('onMySQLReady', function()
 
-	--MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
+	MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
 
 end)
 -- Fin Fonction qui change les etats sorti en rentré lors d'un restart
