@@ -1,5 +1,3 @@
-
-
 -- Local
 local Keys = {
 	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57, 
@@ -58,7 +56,7 @@ function refreshBlips()
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString(zoneKey)
 		EndTextCommandSetBlipName(blip)
-
+		
 		local blip = AddBlipForCoord(zoneValues.MunicipalPoundPoint.Pos.x, zoneValues.MunicipalPoundPoint.Pos.y, zoneValues.MunicipalPoundPoint.Pos.z)
 		SetBlipSprite (blip, Config.BlipPound.Sprite)
 		SetBlipDisplay(blip, 4)
@@ -102,9 +100,9 @@ function OpenMenuGarage()
 			if(data.current.value == 'stock_vehicle') then
 				StockVehicleMenu()
 			end
-			-- if(data.current.value == 'return_vehicle') then
-			--	ReturnVehicleMenu()
-			-- end
+			if(data.current.value == 'return_vehicle') then
+				ReturnVehicleMenu()
+			end
 
 			local playerPed = GetPlayerPed(-1)
 			SpawnVehicle(data.current.value)
@@ -142,15 +140,15 @@ function OpenMenuPound()
 		function(data, menu)
 
 			menu.close()
-			--if(data.current.value == 'list_vehicles') then
-			--	ListVehiclesMenu()
-			--end
-			--if(data.current.value == 'stock_vehicle') then
-			--	StockVehicleMenu()
-			--end
-			 if(data.current.value == 'return_vehicle') then
+			if(data.current.value == 'list_vehicles') then
+				ListVehiclesMenu()
+			end
+			if(data.current.value == 'stock_vehicle') then
+				StockVehicleMenu()
+			end
+			if(data.current.value == 'return_vehicle') then
 				ReturnVehicleMenu()
-			 end
+			end
 
 			local playerPed = GetPlayerPed(-1)
 			SpawnVehicle(data.current.value)
@@ -163,8 +161,6 @@ function OpenMenuPound()
 		end
 	)	
 end
-
-
 -- Afficher les listes des vehicules
 function ListVehiclesMenu()
 	local elements = {}
@@ -313,7 +309,6 @@ function SpawnPoundedVehicle(vehicle)
 
 end
 --Fin fonction pour spawn vehicule fourriere
-
 --Action das les markers
 AddEventHandler('eden_garage:hasEnteredMarker', function(zone)
 	if zone == 'garage' then
@@ -321,6 +316,7 @@ AddEventHandler('eden_garage:hasEnteredMarker', function(zone)
 		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour ouvrir le garage"
 		CurrentActionData = {}
 	end
+	
 	if zone == 'pound' then
 		CurrentAction     = 'pound_action_menu'
 		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour acceder a la fourriere"
@@ -366,7 +362,6 @@ function ReturnVehicleMenu()
 							
 					TriggerServerEvent('eden_garage:pay')
 					SpawnPoundedVehicle(data.current.value)
-					ESX.UI.Menu.CloseAll()
 				else
 					ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
 				end
@@ -394,7 +389,7 @@ Citizen.CreateThread(function()
 			end
 			if(GetDistanceBetweenCoords(coords, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, true) < Config.DrawDistance) then
 				DrawMarker(v.MunicipalPoundPoint.Marker, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.MunicipalPoundPoint.Size.x, v.MunicipalPoundPoint.Size.y, v.MunicipalPoundPoint.Size.z, v.MunicipalPoundPoint.Color.r, v.MunicipalPoundPoint.Color.g, v.MunicipalPoundPoint.Color.b, 100, false, true, 2, false, false, false, false)	
-				DrawMarker(v.SpawnMunicipalPoundPoint.Marker, v.SpawnMunicipalPoundPoint.Pos.x, v.SpawnMunicipalPoundPoint.Pos.y, v.SpawnMunicipalPoundPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.SpawnMunicipalPoundPoint.Size.x, v.SpawnMunicipalPoundPoint.Size.y, v.SpawnMunicipalPoundPoint.Size.z, v.SpawnMunicipalPoundPoint.Color.r, v.SpawnMunicipalPoundPoint.Color.g, v.SpawnMunicipalPoundPoint.Color.b, 100, false, true, 2, false, false, false, false)	
+				DrawMarker(v.SpawnMunicipalPoundPoint.Marker, v.SpawnMunicipalPoundPoint.Pos.x, v.SpawnMunicipalPoundPoint.Pos.y, v.SpawnMunicipalPoundPoint.Pos.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, v.SpawnMunicipalPoundPoint.Size.x, v.SpawnMunicipalPoundPoint.Size.y, v.SpawnMunicipalPoundPoint.Size.z, v.SpawnMunicipalPoundPoint.Color.r, v.SpawnMunicipalPoundPoint.Color.g, v.SpawnMunicipalPoundPoint.Color.b, 100, false, true, 2, false, false, false, false)
 			end		
 		end	
 	end
@@ -415,6 +410,7 @@ Citizen.CreateThread(function()
 			if(GetDistanceBetweenCoords(coords, v.Pos.x, v.Pos.y, v.Pos.z, true) < v.Size.x) then
 				isInMarker  = true
 				this_Garage = v
+				currentZone = 'garage'
 			end
 			if(GetDistanceBetweenCoords(coords, v.MunicipalPoundPoint.Pos.x, v.MunicipalPoundPoint.Pos.y, v.MunicipalPoundPoint.Pos.z, true) < v.MunicipalPoundPoint.Size.x) then
 				isInMarker  = true
@@ -469,4 +465,3 @@ Citizen.CreateThread(function()
 	end
 end)
 -- Fin controle touche
-

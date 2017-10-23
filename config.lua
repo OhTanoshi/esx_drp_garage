@@ -75,4 +75,3 @@ Config.Garages = {
 	},
 
 }
-
