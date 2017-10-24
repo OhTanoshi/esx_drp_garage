@@ -18,6 +18,7 @@ local HasAlreadyEnteredMarker   = false
 local LastZone                  = nil
 local CurrentActionMsg          = ''
 local CurrentActionData         = {}
+local times 			= 0
 
 local this_Garage = {}
 
@@ -338,7 +339,6 @@ function ReturnVehicleMenu()
 	ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
 
 		local elements = {}
-		local times = 0
 
 		for _,v in pairs(vehicles) do
 
