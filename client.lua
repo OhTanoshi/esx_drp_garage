@@ -370,9 +370,7 @@ function ReturnVehicleMenu()
 						times=times+1
 					elseif times > 0 then
 						ESX.SetTimeout(60000, function()
-						TriggerServerEvent('eden_garage:pay')
 						times=0
-						SpawnPoundedVehicle(data.current.value)
 						end)
 					end
 				else
