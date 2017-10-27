@@ -103,9 +103,7 @@ function OpenMenuGarage()
 				StockVehicleMenu()
 			end
 			if(data.current.value == 'return_vehicle') then
-				ESX.SetTimeout(60000, function()
-					ReturnVehicleMenu()
-				end)
+				ReturnVehicleMenu()
 			end
 
 			local playerPed = GetPlayerPed(-1)
