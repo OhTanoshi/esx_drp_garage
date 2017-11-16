@@ -33,7 +33,7 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
 	local plate = vehicleProps.plate
-
+	print(plate)
 	
 		for _,v in pairs(vehicules) do
 			if(plate == v.plate)then

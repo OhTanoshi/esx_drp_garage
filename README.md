@@ -19,6 +19,5 @@ BUG CONNU :
 Nous travaillons dessus. 
 
 Fonctionnement :
-Le cercle jaune pour sortir / rentrer vehicule / recuperer vehicule ( en cas de depop de celui ci )
-Pour rntrer un vehicule, le mettre dans le rond rouge puis aller dans le rond jaune et faire rentrer vehicule
+Entrez dans le cercle vert a pied pour sortir un vehicule, entre dans le cercle rouge avec votre vehicule pour le rentrer si le vehicule est endomagé un menu vous annonce le montant de la facture vous pouvez la payer pour rentrer le vehicule ou aller voir un mécano
 
