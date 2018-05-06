@@ -35,4 +35,3 @@ Enter the green circle on foot to enter a vehicle, enter the red circle with you
 
 
 This was originally made off of esx_eden_garage but has had alot of improments and fixes and will have more to come hopefully.
-All rights to the code belong to the orginal 
