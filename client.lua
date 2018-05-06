@@ -1,4 +1,3 @@
--- Local
 local Keys = {
 	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57, 
 	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177, 
@@ -22,7 +21,6 @@ local times 			= 0
 
 local this_Garage = {}
 
--- Fin Local
 
 -- Init ESX
 ESX = nil
@@ -33,9 +31,8 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 	end
 end)
--- Fin init ESX
 
---- Gestion Des blips
+--- Blips Management
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
     --PlayerData = xPlayer
@@ -70,9 +67,8 @@ function refreshBlips()
 		EndTextCommandSetBlipName(blip)
 	end
 end
--- Fin Gestion des Blips
 
---Fonction Menu
+--Menu function
 
 function OpenMenuGarage(PointType)
 
@@ -82,15 +78,15 @@ function OpenMenuGarage(PointType)
 
 	
 	if PointType == 'spawn' then
-		table.insert(elements,{label = "Liste des véhicules", value = 'list_vehicles'})
+		table.insert(elements,{label = "List of vehicles", value = 'list_vehicles'})
 	end
 
 	if PointType == 'delete' then
-		table.insert(elements,{label = "Rentrer vehicules", value = 'stock_vehicle'})
+		table.insert(elements,{label = "Store vehicle", value = 'stock_vehicle'})
 	end
 
 	if PointType == 'pound' then
-		table.insert(elements,{label = "Retour vehicule ("..Config.Price.."$)", value = 'return_vehicle'})
+		table.insert(elements,{label = "Return car from impound ("..Config.Price.."$)", value = 'return_vehicle'})
 	end
 
 	ESX.UI.Menu.Open(
@@ -125,7 +121,7 @@ function OpenMenuGarage(PointType)
 end
 
 
--- Afficher les listes des vehicules
+-- View Vehicle Listings
 function ListVehiclesMenu()
 	local elements = {}
 
@@ -141,7 +137,7 @@ function ListVehiclesMenu()
     		labelvehicle = vehicleName..': Garage'
     		
     		else
-    		labelvehicle = vehicleName..': Fourriere'
+    		labelvehicle = vehicleName..': Pound'
     		end	
 			table.insert(elements, {label =labelvehicle , value = v})
 			
@@ -159,7 +155,7 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-				TriggerEvent('esx:showNotification', 'Votre véhicule est a la fourriere')
+				TriggerEvent('pNotify:SendNotification', 'Your vehicle is at the inpound')
 			end
 		end,
 		function(data, menu)
@@ -169,7 +165,7 @@ function ListVehiclesMenu()
 	)	
 	end)
 end
--- Fin Afficher les listes des vehicules
+
 function reparation(prix,vehicle,vehicleProps)
 	
 	ESX.UI.Menu.CloseAll()
@@ -193,7 +189,7 @@ function reparation(prix,vehicle,vehicleProps)
 				ranger(vehicle,vehicleProps)
 			end
 			if(data.current.value == 'no') then
-				ESX.ShowNotification('Passez voir le mécano')
+				ESX.ShowNotification('Got to the mechanic')
 			end
 
 		end,
@@ -207,10 +203,10 @@ end
 function ranger(vehicle,vehicleProps)
 	ESX.Game.DeleteVehicle(vehicle)
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
-	TriggerEvent('esx:showNotification', 'Votre véhicule est dans le garage')
+	TriggerEvent('pNotify:SendNotification', 'Your vehicle is in the garage')
 end
 
--- Fonction qui permet de rentrer un vehicule
+-- Function that allows player to enter a vehicle
 function StockVehicleMenu()
 	local playerPed  = GetPlayerPed(-1)
 	if IsPedInAnyVehicle(playerPed,  false) then
@@ -225,8 +221,8 @@ function StockVehicleMenu()
 		ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 
 			if (valid) then
-				TriggerServerEvent('eden_garage:debug', "plaque vehicule rentree au garage: "  .. vehicleProps.plate)
-				TriggerServerEvent('eden_garage:logging',"santee vehicule rentree au garage: " .. engineHealth)
+				TriggerServerEvent('eden_garage:debug', "vehicle plate returned to the garage: "  .. vehicleProps.plate)
+				TriggerServerEvent('eden_garage:logging',"vehicle returned to the garage: " .. engineHealth)
 				if engineHealth < 1000 then
 			        local fraisRep= math.floor((1000 - engineHealth)*100)			      
 			        reparation(fraisRep,vehicle,vehicleProps)
@@ -234,19 +230,18 @@ function StockVehicleMenu()
 			    	ranger(vehicle,vehicleProps)
 			    end	
 			else
-				TriggerEvent('esx:showNotification', 'Vous ne pouvez pas stocker ce véhicule')
+				TriggerEvent('pNotify:SendNotification', 'You can not store this vehicle')
 			end
 		end,vehicleProps)
 	else
-		TriggerEvent('esx:showNotification', 'Il n\' y a pas de vehicule à rentrer')
+		TriggerEvent('pNotify:SendNotification', 'There is no vehicle to enter')
 	end
 
 end
--- Fin fonction qui permet de rentrer un vehicule 
---Fin fonction Menu
 
 
---Fonction pour spawn vehicule
+
+--Function for spawning vehicle
 function SpawnVehicle(vehicle)
 
 	ESX.Game.SpawnVehicle(vehicle.model,{
@@ -265,9 +260,8 @@ function SpawnVehicle(vehicle)
 	TriggerServerEvent('eden_garage:modifystate', vehicle, false)
 
 end
---Fin fonction pour spawn vehicule
 
---Fonction pour spawn vehicule fourriere
+--Function for spawning vehicle
 function SpawnPoundedVehicle(vehicle)
 
 	ESX.Game.SpawnVehicle(vehicle.model, {
@@ -286,25 +280,25 @@ function SpawnPoundedVehicle(vehicle)
 	end)
 
 end
---Fin fonction pour spawn vehicule fourriere
---Action das les markers
+
+-- Marker actions
 AddEventHandler('eden_garage:hasEnteredMarker', function(zone)
 
 	if zone == 'spawn' then
 		CurrentAction     = 'spawn'
-		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour sortir un vehicule"
+		CurrentActionMsg  = "Press ~INPUT_PICKUP~ retrive your vehicle"
 		CurrentActionData = {}
 	end
 
 	if zone == 'delete' then
 		CurrentAction     = 'delete'
-		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour rentrer un vehicule"
+		CurrentActionMsg  = "Press ~INPUT_PICKUP~ store vehicle"
 		CurrentActionData = {}
 	end
 	
 	if zone == 'pound' then
 		CurrentAction     = 'pound_action_menu'
-		CurrentActionMsg  = "Appuyer sur ~INPUT_PICKUP~ pour acceder a la fourriere"
+		CurrentActionMsg  = "Press ~INPUT_PICKUP~ to access the impound"
 		CurrentActionData = {}
 	end
 end)
@@ -313,7 +307,6 @@ AddEventHandler('eden_garage:hasExitedMarker', function(zone)
 	ESX.UI.Menu.CloseAll()
 	CurrentAction = nil
 end)
---Fin Action das les markers
 
 function ReturnVehicleMenu()
 
@@ -327,7 +320,7 @@ function ReturnVehicleMenu()
     		local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
     		local labelvehicle
 
-    		labelvehicle = vehicleName..': Sortie'
+    		labelvehicle = vehicleName..': Exit'
     	
 			table.insert(elements, {label =labelvehicle , value = v})
 			
@@ -355,7 +348,7 @@ function ReturnVehicleMenu()
 						end)
 					end
 				else
-					ESX.ShowNotification('Vous n\'avez pas assez d\'argent')						
+					ESX.ShowNotification('You do not have enough money')						
 				end
 			end)
 		end,
@@ -367,7 +360,7 @@ function ReturnVehicleMenu()
 	end)
 end
 
--- Affichage markers
+-- Display markers 
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)		
@@ -385,9 +378,8 @@ Citizen.CreateThread(function()
 		end	
 	end
 end)
--- Fin affichage markers
 
--- Activer le menu quand player dedans
+-- Open/close menus
 Citizen.CreateThread(function()
 	local currentZone = 'garage'
 	while true do
@@ -431,9 +423,7 @@ Citizen.CreateThread(function()
 end)
 
 
--- Fin activer le menu fourriere quand player dedans
-
--- Controle touche
+-- Button press
 Citizen.CreateThread(function()
 	while true do
 

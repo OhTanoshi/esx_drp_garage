@@ -1,23 +1,27 @@
-# esx_eden_garage
-Garage privé basé sur ESX
+﻿# esx_drp_
+Garage privé basé sur 
+ESX
 
 Requirement : 
-fxserver-esx_vehicleshop
+fxserver-esx_vehicleshop 
+garage only takes into account vehicles purchased in the dealership and also vehicles that have been stored or taken out.
 
-Le garage prends en compte uniquement les véhicules achetés dans le concessionaire et aussi les véhicules qui sont dehors ou non.
-Lors d'un reboot tous les véhicules passe en rentré.
 
-1) Il faut appliquer le SQL
-2) Mettre la resource dans votre server.cfg
-3) Modifier la config pour ajouter garage ou modifier
+During a reboot, all vehicles go back to the garage
 
-BUG CONNU :
+1) Run the sql file in your sql database. Make sure your in the correct database!
+2) Add resource into your server.cfg
+3) Modify the config to add garage or modify locations.
 
-- Certains véhicules sont impossible à rentrer
-- En cherchant bien il est possible de dupliquer les véhicules
 
-Nous travaillons dessus. 
 
-Fonctionnement :
-Entrez dans le cercle vert a pied pour sortir un vehicule, entre dans le cercle rouge avec votre vehicule pour le rentrer si le vehicule est endomagé un menu vous annonce le montant de la facture vous pouvez la payer pour rentrer le vehicule ou aller voir un mécano
 
+KNOWN BUGS:
+
+As of right now i have not found any.
+
+
+
+
+How it works:
+Enter the green circle on foot to enter a vehicle, enter the red circle with your vehicle to store it if the vehicle is damaged a menu announces the amount of the bill you can pay to enter the vehicle or go see a mechanic.
