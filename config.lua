@@ -1,11 +1,15 @@
 
 Config = {
+
 	DrawDistance = 100,
+	
 	Price = 3000,
+	
 	BlipInfos = {
 		Sprite = 290,
 		Color = 38 
 	},
+	
 	BlipPound = {
 		Sprite = 67,
 		Color = 64 
@@ -13,6 +17,7 @@ Config = {
 }
 
 Config.Garages = {
+
 	Garage_Centre = {	
 		Pos = {x=215.800, y=-810.057, z=29.727},
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
@@ -46,6 +51,7 @@ Config.Garages = {
 			Heading=299.42
 		},
 	},
+	
 	Garage_Paleto = {	
 		Pos = {x=105.359, y=6613.586, z=31.3973},
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
@@ -76,6 +82,7 @@ Config.Garages = {
 			Marker = 1
 		},
 	},
+	
 	Garage_Poissoniers = {	
 		Pos = {x = -1511.6556396484,y = 5009.875,z = 61.800533294678 },
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
@@ -106,6 +113,7 @@ Config.Garages = {
 			Marker = 1
 		},
 	},
+	
 	Garage_SandyShore = {	
 		Pos = {x = 1979.3223876953,y = 3828.7197265625,z = 31.394721984863 },
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
@@ -136,6 +144,7 @@ Config.Garages = {
 			Marker = 1
 		},
 	},
+	
 		Garage_Aeroport = {	
 		Pos = {x = -977.21661376953,y = -2710.3798828125,z = 12.853487014771 },
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
