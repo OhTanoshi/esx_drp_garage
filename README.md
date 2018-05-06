@@ -1,9 +1,15 @@
-﻿# esx_drp_
+﻿# esx_drp_garage.
 Custom Garage for ESX
 
+This was originally modified for Dream Roleplay Serious rp server.
+
+
+
+
 Requirement : 
-fxserver-esx_vehicleshop 
-pNotify
+1. ESX
+2. esx_vehicleshop 
+3. pNotify
 garage only takes into account vehicles purchased in the dealership and also vehicles that have been stored or taken out.
 
 
