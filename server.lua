@@ -202,5 +202,3 @@ end)
 AddEventHandler('eden_garage:logging', function(logging)
 	RconPrint(logging)
 end)
-
---fin de logger dans la console

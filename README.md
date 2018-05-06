@@ -3,6 +3,7 @@ Custom Garage for ESX
 
 Requirement : 
 fxserver-esx_vehicleshop 
+pNotify
 garage only takes into account vehicles purchased in the dealership and also vehicles that have been stored or taken out.
 
 
@@ -24,3 +25,8 @@ As of right now i have not found any.
 
 How it works:
 Enter the green circle on foot to enter a vehicle, enter the red circle with your vehicle to store it if the vehicle is damaged a menu announces the amount of the bill you can pay to enter the vehicle or go see a mechanic.
+
+
+
+This was originally made off of esx_eden_garage but has had alot of improments and fixes and will have more to come hopefully.
+All rights to the code belong to the orginal 

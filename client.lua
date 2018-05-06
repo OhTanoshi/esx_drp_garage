@@ -155,7 +155,13 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-				TriggerEvent('pNotify:SendNotification', 'Your vehicle is at the inpound')
+					TriggerEvent("pNotify:SendNotification",{
+					text = "Garage Notification: <br /> Your car is in the impound!",
+					type = "success",
+					timeout = (5000),
+					layout = "centerLeft",
+					queue = "global"
+				})
 			end
 		end,
 		function(data, menu)
@@ -203,7 +209,13 @@ end
 function ranger(vehicle,vehicleProps)
 	ESX.Game.DeleteVehicle(vehicle)
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
-	TriggerEvent('pNotify:SendNotification', 'Your vehicle is in the garage')
+	TriggerEvent("pNotify:SendNotification",{
+					text = "Garage Notification: <br /> Your car is in the garage!",
+					type = "success",
+					timeout = (5000),
+					layout = "centerLeft",
+					queue = "global"
+	})
 end
 
 -- Function that allows player to enter a vehicle
@@ -230,11 +242,24 @@ function StockVehicleMenu()
 			    	ranger(vehicle,vehicleProps)
 			    end	
 			else
-				TriggerEvent('pNotify:SendNotification', 'You can not store this vehicle')
+					TriggerEvent("pNotify:SendNotification",{
+					text = "Garage Notification: <br /> Your don't own this car!",
+					type = "success",
+					timeout = (5000),
+					layout = "centerLeft",
+					queue = "global"
+				})
 			end
 		end,vehicleProps)
 	else
-		TriggerEvent('pNotify:SendNotification', 'There is no vehicle to enter')
+		--TriggerEvent('pNotify:SendNotification', 'There is no vehicle to enter')
+		TriggerEvent("pNotify:SendNotification",{
+			text = "Garage Notification: <br /> Your car needs to be in the white marker!",
+			type = "success",
+			timeout = (5000),
+			layout = "centerLeft",
+			queue = "global"
+		})
 	end
 
 end
@@ -348,7 +373,13 @@ function ReturnVehicleMenu()
 						end)
 					end
 				else
-					ESX.ShowNotification('You do not have enough money')						
+					TriggerEvent("pNotify:SendNotification",{
+					text = "Garage Notification: <br /> You do not have enough money",
+					type = "success",
+					timeout = (5000),
+					layout = "centerLeft",
+					queue = "global"
+				})
 				end
 			end)
 		end,
