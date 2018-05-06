@@ -1,6 +1,5 @@
 ﻿# esx_drp_
-Garage privé basé sur 
-ESX
+Custom Garage for ESX
 
 Requirement : 
 fxserver-esx_vehicleshop 
