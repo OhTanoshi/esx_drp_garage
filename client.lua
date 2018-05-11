@@ -155,13 +155,7 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-					TriggerEvent("pNotify:SendNotification",{
-					text = "Garage Notification: <br /> Your car is in the impound!",
-					type = "success",
-					timeout = (5000),
-					layout = "centerLeft",
-					queue = "global"
-				})
+					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car is in the impound!", queue = "right", timeout = 400, layout = "centerLeft" })
 			end
 		end,
 		function(data, menu)
@@ -177,13 +171,13 @@ function reparation(prix,vehicle,vehicleProps)
 	ESX.UI.Menu.CloseAll()
 
 	local elements = {
-		{label = "Rentrer le vehicule ("..prix.."$)", value = 'yes'},
-		{label = "passer voir le mécano", value = 'no'},
+		{label = "Enter the vehicle ("..prix.."$)", value = 'yes'},
+		{label = "see the mechanic", value = 'no'},
 	}
 	ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'delete_menu',
 		{
-			title    = 'vehicule endomagé',
+			title    = 'Vehicle is Dammaged',
 			align    = 'top-left',
 			elements = elements,
 		},
@@ -209,13 +203,7 @@ end
 function ranger(vehicle,vehicleProps)
 	ESX.Game.DeleteVehicle(vehicle)
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
-	TriggerEvent("pNotify:SendNotification",{
-					text = "Garage Notification: <br /> Your car is in the garage!",
-					type = "success",
-					timeout = (5000),
-					layout = "centerLeft",
-					queue = "global"
-	})
+	exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car is in the garage!", queue = "right", timeout = 400, layout = "centerLeft" })
 end
 
 -- Function that allows player to enter a vehicle
@@ -242,24 +230,11 @@ function StockVehicleMenu()
 			    	ranger(vehicle,vehicleProps)
 			    end	
 			else
-					TriggerEvent("pNotify:SendNotification",{
-					text = "Garage Notification: <br /> Your don't own this car!",
-					type = "success",
-					timeout = (5000),
-					layout = "centerLeft",
-					queue = "global"
-				})
+					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your don't own this car!", queue = "right", timeout = 400, layout = "centerLeft" })
 			end
 		end,vehicleProps)
-	else
-		--TriggerEvent('pNotify:SendNotification', 'There is no vehicle to enter')
-		TriggerEvent("pNotify:SendNotification",{
-			text = "Garage Notification: <br /> Your car needs to be in the white marker!",
-			type = "success",
-			timeout = (5000),
-			layout = "centerLeft",
-			queue = "global"
-		})
+	else		
+		exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car needs to be in the white marker!", queue = "right", timeout = 400, layout = "centerLeft" })
 	end
 
 end
@@ -373,21 +348,14 @@ function ReturnVehicleMenu()
 						end)
 					end
 				else
-					TriggerEvent("pNotify:SendNotification",{
-					text = "Garage Notification: <br /> You do not have enough money",
-					type = "success",
-					timeout = (5000),
-					layout = "centerLeft",
-					queue = "global"
-				})
+					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> You do not have enough money", queue = "right", timeout = 400, layout = "centerLeft" })
 				end
 			end)
 		end,
 		function(data, menu)
 			menu.close()
 			--CurrentAction = 'open_garage_action'
-		end
-		)	
+		end)	
 	end)
 end
 
