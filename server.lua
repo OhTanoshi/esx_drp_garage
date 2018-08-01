@@ -48,7 +48,8 @@ AddEventHandler('eden_garage:modifystate', function(plate, state)
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
 	local state = state
-
+	print('UPDATING STATE')
+	print(plate)
 	for _,v in pairs(vehicules) do
 		MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
 		break		
@@ -142,32 +143,31 @@ function to_string( tbl )
         return tostring(tbl)
     end
 end
---Fin Debug
+-- End debug
+-- Return all vehicles to garage (state update) on server restart
 
-
--- Fonction qui change les etats sorti en rentré lors d'un restart
 AddEventHandler('onMySQLReady', function()
 
 	MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
 
-end)
--- Fin Fonction qui change les etats sorti en rentré lors d'un restart
 
+-- End vehicle return
+-- Pay vehicle repair cost
 
---debut de payement pour la santé vehicule
 AddEventHandler('eden_garage:payhealth', function(price)
-
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	xPlayer.removeMoney(price)
 
-	TriggerClientEvent('esx:showNotification', source, 'You paid' .. price)
+	TriggerClientEvent('esx:showNotification', source, _U('you_paid')..' ' .. price)
 
 end)
---fin de payement pour la santé vehicule
 
+-- End repair cost
+-- Log to the console
 
---logger dans la console
 AddEventHandler('eden_garage:logging', function(logging)
 	RconPrint(logging)
 end)
+
+-- End console log
