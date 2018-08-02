@@ -3,13 +3,11 @@ RegisterServerEvent('eden_garage:modifystate')
 RegisterServerEvent('eden_garage:pay')
 RegisterServerEvent('eden_garage:payhealth')
 RegisterServerEvent('eden_garage:logging')
-
-
 ESX                = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-
+-- Vehicle fetch
 ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
@@ -23,7 +21,8 @@ ESX.RegisterServerCallback('eden_garage:getVehicles', function(source, cb)
 		cb(vehicules)
 	end)
 end)
-
+-- End vehicle fetch
+-- Store & update vehicle properties
 ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps)
 	local isFound = false
 	local _source = source
@@ -42,7 +41,8 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 		end
 	cb(isFound)
 end)
-
+-- End vehicle store
+-- Change state of vehicle
 AddEventHandler('eden_garage:modifystate', function(plate, state)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
@@ -54,8 +54,10 @@ AddEventHandler('eden_garage:modifystate', function(plate, state)
 		MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
 		break		
 	end
-end)	
-
+end)
+-- End state update
+-- Function to recover plates deprecated and removed.
+-- Get list of vehicles already out
 ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb)	
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
@@ -69,7 +71,8 @@ ESX.RegisterServerCallback('eden_garage:getOutVehicles',function(source, cb)
 		cb(vehicules)
 	end)
 end)
-
+-- End out list
+-- Check player has funds
 ESX.RegisterServerCallback('eden_garage:checkMoney', function(source, cb)
 
 	local xPlayer = ESX.GetPlayerFromId(source)
@@ -80,17 +83,19 @@ ESX.RegisterServerCallback('eden_garage:checkMoney', function(source, cb)
 		cb(false)
 	end
 end)
-
+-- End funds check
+-- Withdraw money
 AddEventHandler('eden_garage:pay', function()
 
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-
 	xPlayer.removeMoney(Config.Price)
-	exports.pNotify:SendNotification({ text = "Garage Notification: You have paid Config.Price", queue = "right", timeout = 400, layout = "centerLeft" })
+
+	TriggerClientEvent('esx:showNotification', source, _U('you_paid')..' ' .. Config.Price)
 
 end)
-
+-- End money withdraw
+-- Find player vehicles
 function getPlayerVehicles(identifier)
 	
 	local vehicles = {}
@@ -101,11 +106,11 @@ function getPlayerVehicles(identifier)
 	end
 	return vehicles
 end
-
+-- End fetch vehicles
+-- Debug [not sure how to use this tbh]
 AddEventHandler('eden_garage:debug', function(var)
 	print(to_string(var))
 end)
-
 function table_print (tt, indent, done)
   done = done or {}
   indent = indent or 0
@@ -131,7 +136,6 @@ function table_print (tt, indent, done)
     return tt .. "\n"
   end
 end
-
 function to_string( tbl )
     if  "nil"       == type( tbl ) then
         return tostring(nil)
@@ -145,15 +149,13 @@ function to_string( tbl )
 end
 -- End debug
 -- Return all vehicles to garage (state update) on server restart
-
 AddEventHandler('onMySQLReady', function()
 
 	MySQL.Sync.execute("UPDATE owned_vehicles SET state=true WHERE state=false", {})
 
-
+end)
 -- End vehicle return
 -- Pay vehicle repair cost
-
 AddEventHandler('eden_garage:payhealth', function(price)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
@@ -162,12 +164,9 @@ AddEventHandler('eden_garage:payhealth', function(price)
 	TriggerClientEvent('esx:showNotification', source, _U('you_paid')..' ' .. price)
 
 end)
-
 -- End repair cost
 -- Log to the console
-
 AddEventHandler('eden_garage:logging', function(logging)
 	RconPrint(logging)
 end)
-
 -- End console log
