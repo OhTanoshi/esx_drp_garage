@@ -3,7 +3,15 @@ Config = {
 
 	DrawDistance = 100,
 	
+	Locale = "en",
+
 	Price = 3000,
+
+	-- This is the multiplier of price to pay when the car is damaged
+	-- 100% damaged means 1000 * Multiplier
+	-- 50% damaged means 500 * Multiplier
+	-- Etc.
+	RepairMultiplier = 1, 
 	
 	BlipInfos = {
 		Sprite = 290,
