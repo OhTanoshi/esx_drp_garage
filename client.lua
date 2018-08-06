@@ -78,21 +78,21 @@ function OpenMenuGarage(PointType)
 
 	
 	if PointType == 'spawn' then
-		table.insert(elements,{label = "List of vehicles", value = 'list_vehicles'})
+		table.insert(elements,{label = _U('list_vehicles'), value = 'list_vehicles'})
 	end
 
 	if PointType == 'delete' then
-		table.insert(elements,{label = "Store vehicle", value = 'stock_vehicle'})
+		table.insert(elements,{label = _U('stock_vehicle'), value = 'stock_vehicle'})
 	end
 
 	if PointType == 'pound' then
-		table.insert(elements,{label = "Return car from impound ("..Config.Price.."$)", value = 'return_vehicle'})
+		table.insert(elements,{label = _U('return_vehicle', Config.Price), value = 'return_vehicle'})
 	end
 
 	ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'garage_menu',
 		{
-			title    = 'Garage',
+			title    = _U('garage'),
 			align    = 'top-left',
 			elements = elements,
 		},
@@ -132,12 +132,11 @@ function ListVehiclesMenu()
 			local hashVehicule = v.vehicle.model
     		local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
     		local labelvehicle
-
     		if(v.state)then
-    		labelvehicle = vehicleName..': Garage'
+    		labelvehicle = _U('status_in_garage', GetLabelText(vehicleName))
     		
     		else
-    		labelvehicle = vehicleName..': Pound'
+    		labelvehicle = _U('status_impounded', GetLabelText(vehicleName))
     		end	
 			table.insert(elements, {label =labelvehicle , value = v})
 			
@@ -146,7 +145,7 @@ function ListVehiclesMenu()
 		ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'spawn_vehicle',
 		{
-			title    = 'Garage',
+			title    = _U('garage'),
 			align    = 'top-left',
 			elements = elements,
 		},
@@ -155,7 +154,7 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car is in the impound!", queue = "right", timeout = 400, layout = "centerLeft" })
+					exports.pNotify:SendNotification({ text = _U('notif_car_impounded'), queue = "right", timeout = 400, layout = "centerLeft" })
 			end
 		end,
 		function(data, menu)
@@ -171,13 +170,13 @@ function reparation(prix,vehicle,vehicleProps)
 	ESX.UI.Menu.CloseAll()
 
 	local elements = {
-		{label = "Enter the vehicle ("..prix.."$)", value = 'yes'},
-		{label = "see the mechanic", value = 'no'},
+		{label = _U('reparation_yes', prix), value = 'yes'},
+		{label = _U('reparation_no', prix), value = 'no'},
 	}
 	ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'delete_menu',
 		{
-			title    = 'Vehicle is Dammaged',
+			title    = _U('reparation'),
 			align    = 'top-left',
 			elements = elements,
 		},
@@ -189,7 +188,7 @@ function reparation(prix,vehicle,vehicleProps)
 				ranger(vehicle,vehicleProps)
 			end
 			if(data.current.value == 'no') then
-				ESX.ShowNotification('Got to the mechanic')
+				ESX.ShowNotification(_U('reparation_no_notif'))
 			end
 
 		end,
@@ -203,7 +202,7 @@ end
 function ranger(vehicle,vehicleProps)
 	ESX.Game.DeleteVehicle(vehicle)
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
-	exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car is in the garage!", queue = "right", timeout = 400, layout = "centerLeft" })
+	exports.pNotify:SendNotification({ text = _U('ranger'), queue = "right", timeout = 400, layout = "centerLeft" })
 end
 
 -- Function that allows player to enter a vehicle
@@ -224,17 +223,17 @@ function StockVehicleMenu()
 				TriggerServerEvent('eden_garage:debug', "vehicle plate returned to the garage: "  .. vehicleProps.plate)
 				TriggerServerEvent('eden_garage:logging',"vehicle returned to the garage: " .. engineHealth)
 				if engineHealth < 1000 then
-			        local fraisRep= math.floor((1000 - engineHealth)*100)			      
+			        local fraisRep= math.floor((1000 - engineHealth)*Config.RepairMultiplier)
 			        reparation(fraisRep,vehicle,vehicleProps)
 			    else
 			    	ranger(vehicle,vehicleProps)
 			    end	
 			else
-					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your don't own this car!", queue = "right", timeout = 400, layout = "centerLeft" })
+					exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
 			end
 		end,vehicleProps)
 	else		
-		exports.pNotify:SendNotification({ text = "Garage Notification: <br /> Your car needs to be in the white marker!", queue = "right", timeout = 400, layout = "centerLeft" })
+		exports.pNotify:SendNotification({ text = _U('stockv_not_in_veh'), queue = "right", timeout = 400, layout = "centerLeft" })
 	end
 
 end
@@ -286,19 +285,19 @@ AddEventHandler('eden_garage:hasEnteredMarker', function(zone)
 
 	if zone == 'spawn' then
 		CurrentAction     = 'spawn'
-		CurrentActionMsg  = "Press ~INPUT_PICKUP~ retrive your vehicle"
+		CurrentActionMsg  = _U('spawn')
 		CurrentActionData = {}
 	end
 
 	if zone == 'delete' then
 		CurrentAction     = 'delete'
-		CurrentActionMsg  = "Press ~INPUT_PICKUP~ store vehicle"
+		CurrentActionMsg  = _U('delete')
 		CurrentActionData = {}
 	end
 	
 	if zone == 'pound' then
 		CurrentAction     = 'pound_action_menu'
-		CurrentActionMsg  = "Press ~INPUT_PICKUP~ to access the impound"
+		CurrentActionMsg  = _U('pound_action_menu')
 		CurrentActionData = {}
 	end
 end)
@@ -320,7 +319,7 @@ function ReturnVehicleMenu()
     		local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
     		local labelvehicle
 
-    		labelvehicle = vehicleName..': Exit'
+    		labelvehicle = _U('impound_list', GetLabelText(vehicleName))
     	
 			table.insert(elements, {label =labelvehicle , value = v})
 			
@@ -329,7 +328,7 @@ function ReturnVehicleMenu()
 		ESX.UI.Menu.Open(
 		'default', GetCurrentResourceName(), 'return_vehicle',
 		{
-			title    = 'Garage',
+			title    = _U('impound_yard'),
 			align    = 'top-left',
 			elements = elements,
 		},
@@ -348,7 +347,7 @@ function ReturnVehicleMenu()
 						end)
 					end
 				else
-					exports.pNotify:SendNotification({ text = "Garage Notification: <br /> You do not have enough money", queue = "right", timeout = 400, layout = "centerLeft" })
+					exports.pNotify:SendNotification({ text = _U('impound_not_enough_money'), queue = "right", timeout = 400, layout = "centerLeft" })
 				end
 			end)
 		end,

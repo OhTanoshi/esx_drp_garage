@@ -43,16 +43,26 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 end)
 -- End vehicle store
 -- Change state of vehicle
-AddEventHandler('eden_garage:modifystate', function(plate, state)
+AddEventHandler('eden_garage:modifystate', function(vehicle, state)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local vehicules = getPlayerVehicles(xPlayer.getIdentifier())
 	local state = state
-	print('UPDATING STATE')
-	print(plate)
+	local plate = vehicle.plate
+	print('UPDATING STATE...')
+	if plate ~= nil then
+		print('plate')
+		print(plate)
+	else
+		print('vehicle')
+		print(vehicle)
+	end
 	for _,v in pairs(vehicules) do
-		MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
-		break		
+		if v.plate == plate then
+			MySQL.Sync.execute("UPDATE owned_vehicles SET state =@state WHERE plate=@plate",{['@state'] = state , ['@plate'] = plate})
+			print('STATE UPDATED...')
+			break
+		end
 	end
 end)
 -- End state update
@@ -91,7 +101,7 @@ AddEventHandler('eden_garage:pay', function()
 
 	xPlayer.removeMoney(Config.Price)
 
-	TriggerClientEvent('esx:showNotification', source, _U('you_paid')..' ' .. Config.Price)
+	TriggerClientEvent('esx:showNotification', source, _U('you_paid', Config.Price))
 
 end)
 -- End money withdraw
@@ -159,9 +169,12 @@ end)
 AddEventHandler('eden_garage:payhealth', function(price)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
-	xPlayer.removeMoney(price)
-
-	TriggerClientEvent('esx:showNotification', source, _U('you_paid')..' ' .. price)
+	if price < 0 then
+		print('CHEATER?')
+	else
+		xPlayer.removeMoney(price)
+		TriggerClientEvent('esx:showNotification', source, _U('you_paid', price))
+	end
 
 end)
 -- End repair cost
