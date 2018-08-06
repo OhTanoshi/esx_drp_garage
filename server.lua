@@ -52,6 +52,7 @@ AddEventHandler('eden_garage:modifystate', function(vehicle, state)
 	print('UPDATING STATE...')
 	if plate ~= nil then
 		print('plate')
+		plate = plate:gsub("^%s*(.-)%s*$", "%1")
 		print(plate)
 	else
 		print('vehicle')
