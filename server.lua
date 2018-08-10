@@ -1,4 +1,5 @@
 RegisterServerEvent('eden_garage:debug')
+RegisterServerEvent('eden_garage:deletevehicle_sv')
 RegisterServerEvent('eden_garage:modifystate')
 RegisterServerEvent('eden_garage:pay')
 RegisterServerEvent('eden_garage:payhealth')
@@ -41,6 +42,11 @@ ESX.RegisterServerCallback('eden_garage:stockv',function(source,cb, vehicleProps
 		end
 	cb(isFound)
 end)
+
+AddEventHandler('eden_garage:deletevehicle_sv', function(vehicle)
+	TriggerClientEvent('eden_garage:deletevehicle_cl', -1, vehicle)
+end)
+
 -- End vehicle store
 -- Change state of vehicle
 AddEventHandler('eden_garage:modifystate', function(vehicle, state)

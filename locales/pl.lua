@@ -17,6 +17,7 @@ Locales['pl'] = {
     ['spawn'] = 'Wciśnij ~INPUT_PICKUP~ aby wyprowadzić pojazd z garażu',
     ['delete'] = 'Wciśnij ~INPUT_PICKUP~ aby przechować pojazd',
     ['pound_action_menu'] = 'Wciśnij ~INPUT_PICKUP~ aby wejść do parkingu policyjnego',
+    ['not_enough_money'] = 'Nie masz wystarczającej ilości pieniędzy',
     ['impound_list'] = '%s: Zwróć',
     ['impound_yard'] = 'Parking Policyjny',
     ['impound_not_enough_money'] = 'Garaż: <br /> Nie masz wystarczającej ilości pieniędzy'
