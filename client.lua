@@ -63,7 +63,7 @@ function refreshBlips()
 		SetBlipColour (blip, Config.BlipPound.Color)
 		SetBlipAsShortRange(blip, true)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("Fourriere")
+		AddTextComponentString(_U('impound_yard'))
 		EndTextCommandSetBlipName(blip)
 	end
 end
@@ -199,8 +199,26 @@ function reparation(prix,vehicle,vehicleProps)
 	)	
 end
 
+RegisterNetEvent('eden_garage:deletevehicle_cl')
+AddEventHandler('eden_garage:deletevehicle_cl', function(plate)
+	local _plate = plate:gsub("^%s*(.-)%s*$", "%1")
+	local playerPed  = GetPlayerPed(-1)
+	if IsPedInAnyVehicle(playerPed,  false) then
+		local playerPed = GetPlayerPed(-1)
+		local coords    = GetEntityCoords(playerPed)
+		local vehicle =GetVehiclePedIsIn(playerPed,false)
+		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+		local usedPlate = vehicleProps.plate:gsub("^%s*(.-)%s*$", "%1")
+		if usedPlate == _plate then
+			ESX.Game.DeleteVehicle(vehicle)
+		end
+	end
+end)
+
+
 function ranger(vehicle,vehicleProps)
-	ESX.Game.DeleteVehicle(vehicle)
+	TriggerServerEvent('eden_garage:deletevehicle_sv', vehicleProps.plate)
+
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
 	exports.pNotify:SendNotification({ text = _U('ranger'), queue = "right", timeout = 400, layout = "centerLeft" })
 end
@@ -220,16 +238,28 @@ function StockVehicleMenu()
 		ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 
 			if (valid) then
-				TriggerServerEvent('eden_garage:debug', "vehicle plate returned to the garage: "  .. vehicleProps.plate)
-				TriggerServerEvent('eden_garage:logging',"vehicle returned to the garage: " .. engineHealth)
-				if engineHealth < 1000 then
-			        local fraisRep= math.floor((1000 - engineHealth)*Config.RepairMultiplier)
-			        reparation(fraisRep,vehicle,vehicleProps)
-			    else
-			    	ranger(vehicle,vehicleProps)
-			    end	
+				ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicules)
+					local plate = vehicleProps.plate:gsub("^%s*(.-)%s*$", "%1")
+					local owned = false
+					for _,v in pairs(vehicules) do
+						if plate == v.plate then
+							owned = true
+							TriggerServerEvent('eden_garage:debug', "vehicle plate returned to the garage: "  .. vehicleProps.plate)
+							TriggerServerEvent('eden_garage:logging',"vehicle returned to the garage: " .. engineHealth)
+							if engineHealth < 1000 then
+								local fraisRep= math.floor((1000 - engineHealth)*Config.RepairMultiplier)
+								reparation(fraisRep,vehicle,vehicleProps)
+							else
+								ranger(vehicle,vehicleProps)
+							end
+						end
+					end
+					if owned == false then
+						exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
+					end
+				end)
 			else
-					exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
+				exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
 			end
 		end,vehicleProps)
 	else		

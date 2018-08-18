@@ -13,12 +13,13 @@ Locales['en'] = {
     ['reparation_no_notif'] = 'To store the vehicle, it needs to be in perfect condition',
     ['ranger'] = 'Garage: <br /> Your car has been stored in the garage!',
     ['stockv_not_owned'] = 'Garage: <br /> This vehicle is not yours!',
-    ['stockv_not_in_veh'] = 'Garaż: <br /> You need to be in a vehicle to store it!',
+    ['stockv_not_in_veh'] = 'Garage: <br /> You need to be in a vehicle to store it!',
     ['spawn'] = 'Press ~INPUT_PICKUP~ to take a vehicle out',
     ['delete'] = 'Press  ~INPUT_PICKUP~ to store a vehicle',
     ['pound_action_menu'] = 'Press ~INPUT_PICKUP~ to enter the impound yard',
+    ['not_enough_money'] = 'You don\'t have enough money',
     ['impound_list'] = '%s: Return',
     ['impound_yard'] = 'Impound Yard',
-    ['impound_not_enough_money'] = 'Garage: <br /> You dont have enough money'
+    ['impound_not_enough_money'] = 'Garage: <br /> You don\'t have enough money'
 
 }
