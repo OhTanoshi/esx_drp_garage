@@ -154,7 +154,7 @@ function ListVehiclesMenu()
 				menu.close()
 				SpawnVehicle(data.current.value.vehicle)
 			else
-					exports.pNotify:SendNotification({ text = _U('notif_car_impounded'), queue = "right", timeout = 400, layout = "centerLeft" })
+					exports.pNotify:SendNotification({ text = _U('notif_car_impounded'), queue = "right", timeout = 3000, layout = "centerLeft" })
 			end
 		end,
 		function(data, menu)
@@ -220,7 +220,7 @@ function ranger(vehicle,vehicleProps)
 	TriggerServerEvent('eden_garage:deletevehicle_sv', vehicleProps.plate)
 
 	TriggerServerEvent('eden_garage:modifystate', vehicleProps, true)
-	exports.pNotify:SendNotification({ text = _U('ranger'), queue = "right", timeout = 400, layout = "centerLeft" })
+	exports.pNotify:SendNotification({ text = _U('ranger'), queue = "right", timeout = 3000, layout = "centerLeft" })
 end
 
 -- Function that allows player to enter a vehicle
@@ -255,15 +255,15 @@ function StockVehicleMenu()
 						end
 					end
 					if owned == false then
-						exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
+						exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 3000, layout = "centerLeft" })
 					end
 				end)
 			else
-				exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 400, layout = "centerLeft" })
+				exports.pNotify:SendNotification({ text = _U('stockv_not_owned'), queue = "right", timeout = 3000, layout = "centerLeft" })
 			end
 		end,vehicleProps)
 	else		
-		exports.pNotify:SendNotification({ text = _U('stockv_not_in_veh'), queue = "right", timeout = 400, layout = "centerLeft" })
+		exports.pNotify:SendNotification({ text = _U('stockv_not_in_veh'), queue = "right", timeout = 3000, layout = "centerLeft" })
 	end
 
 end
@@ -343,10 +343,6 @@ function ReturnVehicleMenu()
 
 		local elements = {}
 
-	ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
-
-		local elements = {}
-
 		for _,v in pairs(vehicles) do
 
 		local hashVehicule = v.model
@@ -381,7 +377,7 @@ function ReturnVehicleMenu()
 						end)
 					end
 				else
-					exports.pNotify:SendNotification({ text = _U('impound_not_enough_money'), queue = "right", timeout = 400, layout = "centerLeft" })
+					exports.pNotify:SendNotification({ text = _U('impound_not_enough_money'), queue = "right", timeout = 3000, layout = "centerLeft" })
 				end
 			end)
 		end,
