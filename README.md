@@ -1,5 +1,5 @@
 # esx_drp_garage
-
+## THIS SCRIPT IS NO LONGER MAINTAINED BY ME
 Custom Garage for ESX
 This was originally modified for Dream Roleplay Serious rp server.
 Garage only takes into account vehicles purchased in the dealership and also vehicles that have been stored or taken out.
@@ -18,7 +18,7 @@ git clone https://github.com/lilfuchs/esx_drp_garage [esx]/esx_drp_garage
 ```
 
 ### Manually
-- Download https://github.com/lilfuchs/esx_drp_garage/archive/master.zip
+- Download https://github.com/OhTanoshi/esx_drp_garage/archive/master.zip
 - Put it in the `[esx]` directory
 
 ## Installation
