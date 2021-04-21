@@ -121,7 +121,7 @@ end)
 ESX.RegisterServerCallback('eden_garage:checkMoney', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
 
-    if xPlayer.get('money') >= Config.Price then
+    if xPlayer.getMoney() >= Config.Price then
         cb(true)
     else
         cb(false)
