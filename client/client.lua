@@ -113,7 +113,7 @@ function ListVehiclesMenu()
 
     ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
         for _, v in pairs(vehicles) do
-            local hashVehicule = v.vehicle.model
+            local hashVehicule = v.model
             local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
             local labelvehicle
 
