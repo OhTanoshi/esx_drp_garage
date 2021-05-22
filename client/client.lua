@@ -110,23 +110,22 @@ end
 -- View Vehicle Listings
 function ListVehiclesMenu()
     local elements = {}
-
+    
     ESX.TriggerServerCallback('eden_garage:getVehicles', function(vehicles)
-        for _, v in pairs(vehicles) do
+    
+        for _,v in pairs(vehicles) do
+    
             local hashVehicule = v.vehicle.model
             local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
             local labelvehicle
-
-            if (v.state) then
-                labelvehicle = _U('status_in_garage', GetLabelText(vehicleName))
+            if(v.state)then
+            labelvehicle = vehicleName _U('status_in_garage', GetLabelText(vehicleName))
+            
             else
-                labelvehicle = _U('status_impounded', GetLabelText(vehicleName))
-            end
-
-            table.insert(elements, {
-                label = labelvehicle,
-                value = v
-            })
+            labelvehicle = vehicleName _U('status_impounded', GetLabelText(vehicleName))
+            end    
+            table.insert(elements, {label =labelvehicle , value = v})
+            
         end
 
         ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'spawn_vehicle', {
@@ -141,7 +140,7 @@ function ListVehiclesMenu()
                 exports.pNotify:SendNotification({
                     text = _U('notif_car_impounded'),
                     queue = 'right',
-                    timeout = 400,
+                    timeout = 40000,
                     layout = 'centerLeft'
                 })
             end
@@ -341,19 +340,21 @@ AddEventHandler('eden_garage:hasExitedMarker', function(zone)
 end)
 
 function ReturnVehicleMenu()
-    ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
-        local elements = {}
 
-        for _, v in pairs(vehicles) do
-            local hashVehicule = v.vehicle.model
+    ESX.TriggerServerCallback('eden_garage:getOutVehicles', function(vehicles)
+    
+        local elements = {}
+    
+        for _,v in pairs(vehicles) do
+    
+            local hashVehicule = v.model
             local vehicleName = GetDisplayNameFromVehicleModel(hashVehicule)
             local labelvehicle
-            labelvehicle = _U('impound_list', GetLabelText(vehicleName))
-
-            table.insert(elements, {
-                label = labelvehicle,
-                value = v
-            })
+    
+            labelvehicle = vehicleName _U('impound_list', GetLabelText(vehicleName))
+        
+            table.insert(elements, {label =labelvehicle , value = v})
+            
         end
 
         ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'return_vehicle', {
